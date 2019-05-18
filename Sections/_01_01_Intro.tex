@@ -1,0 +1,67 @@
+%==========================================================
+%==========================================================
+
+\section{Formulation and Algorithmic Solution for the OWP}
+\label{sec_main}
+% From this point on, you elaborate the main content of the paper. It should be divided in 
+% sections and subsections with a logic flow of ideas.  The sections should be connected
+% and well motivated in the introduction. 
+
+%\subsection{Optimal Well Placement Formalization}
+%\label{sec_Theo_OWP}
+
+Over the collection of decision rules $\mathbf{F}_k$, we propose to chose the rule that minimizes, in average, the remaining uncertainty after
+taking the measurements, or the uncertainty of the remaining variables conditioned by the measured variables. More precisely, given a well-placement decision rule $f \in  \mathbf{F}_k$ let us denote by: 
+%.........................
+\begin{equation}\label{eq_sec_OWP_1}
+X_{f} \equiv ( X_{f(1)},X_{f(2)},..,X_{f(k)}) 
+\end{equation}
+the measured random vector and by, 
+%%.........................
+\begin{equation}\label{eq_sec_OWP_2}
+X_{f^c} \equiv (X_{ij}: (i,j)\in [N]^2 \setminus f )
+\end{equation}
+the non-measured random vector. Note that $f$ denotes all the spatial points measured by the rule $f$ and $f^{c}$ its complement. Then considering a specific measure $X_{f}=(x_1,..,x_k) = x^k \in \mathcal{A}^k$, the remaining uncertainty can be quantify by the \emph{Shannon entropy} \cite{cover2006elements} of $X_{f^c}$ given $X_f$, \emph{i.e.} $H(X_{f^c}|X_{f}=x^k)$. Note that $H(X_{f^c}|X_{f}=x^k)$ represents the uncertainty conditioning to the specific measured values $(x_1,\ldots,x_k)$. In practice, we do not have access to this measurements while making a decision on $\mathbf{F}_k$. Consequently, our objective function should consider the posterior uncertainty in average with respect to the statistics of $X_{f}$. In other words, we consider the \emph{Shannon conditional entropy} \cite{cover2006elements} of $X_{f^c}$ given $X_{f}$, \emph{i.e.}: 
+\begin{equation} \label{eq_sec_OWP_4}
+\footnotesize{
+%\begin{multiline*}
+H(X_{f^c}|X_{f}) =  -\displaystyle\sum_{x^k\in A^k} P_{X_{f}}(x^k) H(X_{f^c}|X_{f}=x^k)
+%\end{multiline}
+}
+\end{equation}
+as the objective function. Then the \emph{OWP} of $k$-measurements reduces to:
+\begin{equation} \label{eq_sec_OWP_5}
+f_{k}^{*} \equiv \argmin_{f \in \mathbf{F}_k} H(X_{f^c}|X_f)
+\end{equation}
+which is the solution that minimizes the posterior uncertainty.
+
+\subsection{Iterative sub-optimal solution for \emph{OWP}}
+\label{sec_numerical_OWP}
+
+The \emph{OWP} problem, as presented in Eq.\eqref{eq_sec_OWP_5} is combinatorial and, consequently, impractical for relatively large random images \cite{krause08near}. We propose an iterative solutions based on the principle of one-step-ahead sensing. The idea is to construct a sub-optimal sensing rule in an incremental fashion to reduce the complexity of the decision algorithm (to something polynomial in the size of the problem) and, therefore, implementable \cite{krause07nectar,krause08thesis,krause08efficient}.
+
+Let us begin with $k = 1$. In this context the \emph{OWP} problem reduces to find one position in the array solution of: 
+%..........................................................................
+\begin{equation}
+\label{eq_numerical_OWP_1}
+	(i^*_1,j^*_1) = \argmax\limits_{\substack{(i,j)\in [N]^2}}H(X_{ij})
+\end{equation}
+by Eq.\eqref{eq:disentropy}.
+
+The idea of the one-step ahead approach implies to fix $(i^*_1,j^*_1)$ and then find the next position in $[N]^2\setminus \left\{(i^*_1,j^*_1)\right\}$ solution of: 
+%..........................................................................
+\begin{equation}\label{eq_numerical_OWP_2}
+(i^*_2,j^*_2) = \argmax\limits_{\substack{(i,j)\in [N]^2 \\ (i,j) \neq (i^*_1,j^*_1)}}H(X_{ij}|X_{i^*_1j^*_1})
+\end{equation}
+Then the problem in Eq.\eqref{eq_numerical_OWP_2} finds the point that maximizes the \emph{a priori} uncertainty (conditioning to previous measured data, in this case $(i^*_1,j^*_1)$), which is the simplest principle to implement.
+
+Hence, iterating this inductive (sensing) rule using the chain-rule of the entropy \cite{cover2006elements}, we have that the $k$-measurement (after taking $(i^*_1,j^*_1), (i^*_2,j^*_2), \ldots,$ $(i^*_{k-1},j^*_{k-1})$) is the solution of:
+%..........................................................................
+\begin{equation}\label{eq_numerical_OWP_3}
+(i^*_k,j^*_k) = \argmax\limits_{\substack{(i,j)\in [N]^2 \\ (i,j) \neq (i^*_p,j^*_p) \\ p = 1,\ldots,k-1}}H(X_{ij}|X_{i^*_1j^*_1},\ldots,X_{i^*_{k-1}j^*_{k-1}})
+\end{equation}
+Therefore with this sequence of ordered data points $\lbrace(i^*_l,j^*_l):$ $l=1,\ldots,N^2 \rbrace$, for every $k\in \left\{1,\ldots,N^2 \right\}$ we can construct the iterative well-placement rule $\tilde{f}^*_k \in \mathbf{F}_k$ by $\tilde{f}^*_k(1)=(i^*_1,j^*_1), \tilde{f}^*_k(2)=(i^*_2,j^*_2), \ldots ,\tilde{f}^*_k(k)=(i^*_k,j^*_k).$ 
+%..........................................................................
+%\begin{equation}\label{eq_numerical_OWP_3b}
+%\tilde{f}^*_k(1)=(i^*_1,j^*_1), \tilde{f}^*_k(2)=(i^*_2,j^*_2),...,\tilde{f}^*_k(k)=(i^*_k,j^*_k).
+%\end{equation}

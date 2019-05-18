@@ -1,0 +1,46 @@
+%\documentclass[upright, contnum]{aFormat/uMemoria_Spanish}
+%\documentclass[upright, contnum]{ {aFormat/uMemoria_English} }
+\documentclass[upright, contnum]{uMemoria_English}
+\include{Packages}
+\include{IncludeFigure}
+
+%\include{aFormat/Title_Spanish}
+%\include{aFormat/Title_English}
+
+\include{Tesis_Info}
+
+\begin{document}
+
+		\frontmatter
+		% Make Title pages
+		\maketitle
+		%\MakeCustomTitleSpanish
+		%\MakeCustomTitleEnglish
+		
+
+		\input{Sections/_00_Base.tex}
+
+		\cleardoublepage
+		\tableofcontents
+		\cleardoublepage
+		\listoftables
+		\cleardoublepage
+		\listoffigures
+
+		%\printnomencl
+		
+		\mainmatter
+
+		\input{Sections/_01_Introduction.tex}
+		%\input{Sections/_02_Proposal.tex}
+		%\input{Sections/_03_PreliminarResults.tex}
+		%\input{Sections/_04_RoadMap.tex}
+		%\input{Sections/_05_ExpectedOutcomes.tex}
+		%\input{Sections/_06_Conclusion.tex}
+
+
+		\input{Sections/__References.tex}
+		%\nocite{*}
+		%\bibliographystyle{plain}
+		%\bibliography{bibliografia}
+\end{document}
